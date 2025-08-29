@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: hvordan-gikk-quizen-backend
+
+#app:
+#  version: '@project.version@'
