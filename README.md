@@ -8,4 +8,4 @@
 
 ### Production
 
--**Swagger UI:** https://api.hvordangikkquizen.no/swagger-ui/index.html
+- **Swagger UI:** https://api.hvordangikkquizen.no/swagger-ui/index.html
