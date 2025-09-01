@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="main-prod" type="SpringBootApplicationConfigurationType"
+    <configuration default="false" name="main-local" type="SpringBootApplicationConfigurationType"
                    factoryName="Spring Boot">
         <envs>
-            <env name="SPRING_PROFILES_ACTIVE" value="prod"/>
+            <env name="SPRING_PROFILES_ACTIVE" value="local"/>
         </envs>
         <module name="hvordan-gikk-quizen-backend"/>
         <option name="SPRING_BOOT_MAIN_CLASS" value="no.fritjof.hgq.HvordanGikkQuizenBackendApplication"/>

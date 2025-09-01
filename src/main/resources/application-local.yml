@@ -2,5 +2,8 @@ spring:
   application:
     name: hvordan-gikk-quizen-backend
 
-#app:
-#  version: '@project.version@'
+server:
+  port: 8080
+
+cors:
+  allowed-origin: http://localhost:3000

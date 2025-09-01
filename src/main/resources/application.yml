@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: hvordan-gikk-quizen-backend
+  profiles:
+    default: local
+
