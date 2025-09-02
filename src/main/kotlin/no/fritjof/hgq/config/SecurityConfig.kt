@@ -1,40 +1,58 @@
 package no.fritjof.hgq.config
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
 @Configuration
-class SecurityConfig {
+class SecurityConfig(
+    @Value($$"${cors.allowed-origin}") private val allowedOrigin: String
+) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain? {
         http
             .csrf { it.disable() }
+            .cors { it.configurationSource(corsConfigurationSource()) }
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/api/admin/**").authenticated()
                     .requestMatchers(
-                        HttpMethod.GET,
-                        "/v3/api-docs/**",
-                        "/swagger-ui.html",
-                        "/swagger-ui/**"
+                        HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**"
                     ).permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/results", "/api/ping").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/results", "/api/ping", "/api/user").permitAll()
                     .anyRequest().authenticated()
             }
             .oauth2Login {
-                it.defaultSuccessUrl("/api/admin/me", true)
+                it.defaultSuccessUrl("https://hvordangikkquizen.no/auth/success", true)
             }
             .logout {
-                it.logoutUrl("/api/logout").logoutSuccessHandler { _, response, _ ->
-                    response.status = 200
-                }
+                it.logoutUrl("/api/logout")
+                    .logoutSuccessHandler { _, response, _ ->
+                        response.status = 200
+                    }
             }
         return http.build()
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val cfg = CorsConfiguration().apply {
+            allowedOrigins = listOf(allowedOrigin)
+            allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            allowedHeaders = listOf("*")
+            allowCredentials = true
+        }
+        return UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/api/**", cfg)
+        }
     }
 
 }
