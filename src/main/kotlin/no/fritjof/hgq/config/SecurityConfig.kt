@@ -31,7 +31,7 @@ class SecurityConfig(
                     .anyRequest().authenticated()
             }
             .oauth2Login {
-                it.defaultSuccessUrl("https://hvordangikkquizen.no/auth/success", true)
+                it.defaultSuccessUrl("$allowedOrigin/auth/success", true)
             }
             .logout {
                 it.logoutUrl("/api/logout")
