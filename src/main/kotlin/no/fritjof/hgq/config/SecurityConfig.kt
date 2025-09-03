@@ -23,11 +23,10 @@ class SecurityConfig(
             .cors { it.configurationSource(corsConfigurationSource()) }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/api/admin/**").authenticated()
                     .requestMatchers(
                         HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/health"
                     ).permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/results", "/api/ping", "/api/user").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/result/**", "/api/ping", "/api/user").permitAll()
                     .anyRequest().authenticated()
             }
             .oauth2Login {
