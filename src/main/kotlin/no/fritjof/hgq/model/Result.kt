@@ -1,7 +1,15 @@
 package no.fritjof.hgq.model
 
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import java.time.LocalDate
+
+@Entity
 data class Result(
-    val date: String,
-    val score: Int,
-    val total: Int
+
+    @Id
+    val date: LocalDate = LocalDate.now(),
+    var score: Int = 0,
+    var total: Int = 10
+
 )
