@@ -2,10 +2,12 @@ package no.fritjof.hgq.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -17,7 +19,10 @@ class SecurityConfig(
 ) {
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain? {
+    fun securityFilterChain(
+        http: HttpSecurity,
+        clientRegistrations: ObjectProvider<ClientRegistrationRepository>
+    ): SecurityFilterChain? {
         http
             .csrf { it.disable() }
             .cors { it.configurationSource(corsConfigurationSource()) }
@@ -29,15 +34,19 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/api/result/**", "/api/ping", "/api/user").permitAll()
                     .anyRequest().authenticated()
             }
-            .oauth2Login {
+
+        if (clientRegistrations.ifAvailable != null) {
+            http.oauth2Login {
                 it.defaultSuccessUrl("$allowedOrigin/auth/success", true)
             }
-            .logout {
-                it.logoutUrl("/api/logout")
-                    .logoutSuccessHandler { _, response, _ ->
-                        response.status = 200
-                    }
-            }
+        }
+
+        http.logout {
+            it.logoutUrl("/api/logout")
+                .logoutSuccessHandler { _, response, _ ->
+                    response.status = 200
+                }
+        }
         return http.build()
     }
 
