@@ -34,8 +34,8 @@ build/
 
 
 ### Environment ###
-.env-local
-.env-prod
+.env.local
+.env.prod
 
 ### MacBook ###
 .DS_Store

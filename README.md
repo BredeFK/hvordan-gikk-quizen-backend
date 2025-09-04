@@ -9,3 +9,21 @@
 ### Production
 
 - **Swagger UI:** https://api.hvordangikkquizen.no/swagger-ui/index.html
+
+## Environments
+
+### .env
+
+There are two .env files, one for local development and one for production:
+
+* `.env.local`
+* `.env.prod`
+
+They both look like this:
+```dotenv
+DATABASE_URL=<url>
+DATABASE_USERNAME=<username>
+DATABASE_PASSWORD=<password>
+GOOGLE_CLIENT_ID=<id>
+GOOGLE_CLIENT_SECRET=<secret>
+```
