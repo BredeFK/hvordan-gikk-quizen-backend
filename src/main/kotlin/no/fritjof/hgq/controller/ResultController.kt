@@ -3,10 +3,15 @@ package no.fritjof.hgq.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import no.fritjof.hgq.dto.GoogleUserDto
 import no.fritjof.hgq.model.Result
 import no.fritjof.hgq.service.ResultService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
@@ -14,6 +19,8 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("/api/result")
 class ResultController(private val resultService: ResultService) {
+
+    private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @GetMapping("/all", produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(
@@ -52,8 +59,13 @@ class ResultController(private val resultService: ResultService) {
         description = "Create or update a quiz result",
     )
     @ApiResponse(responseCode = "200", description = "The saved result")
-    fun saveResult(@RequestBody result: Result): ResponseEntity<Result> {
-        return ResponseEntity.ok(resultService.saveResult(result))
+    fun saveResult(@AuthenticationPrincipal user: OAuth2User?, @RequestBody result: Result): ResponseEntity<Result> {
+        if (user == null) {
+            return ResponseEntity.status(401).build()
+        }
+        val response = resultService.saveResult(result)
+        logger.info("User [${GoogleUserDto.toDto(user.attributes).email}] updated result for [${result.date}] to [${result.score}/${result.total}]")
+        return ResponseEntity.ok(response)
     }
 
 }
