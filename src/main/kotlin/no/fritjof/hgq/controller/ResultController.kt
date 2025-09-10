@@ -55,7 +55,7 @@ class ResultController(private val resultService: ResultService) {
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(
-        summary = "Save a result",
+        summary = "Save or update a result",
         description = "Create or update a quiz result",
     )
     @ApiResponse(responseCode = "200", description = "The saved result")
@@ -63,8 +63,8 @@ class ResultController(private val resultService: ResultService) {
         if (user == null) {
             return ResponseEntity.status(401).build()
         }
-        val response = resultService.saveResult(result)
-        logger.info("User [${GoogleUserDto.toDto(user.attributes).email}] updated result for [${result.date}] to [${result.score}/${result.total}]")
+        val googleUser = GoogleUserDto.toDto(user.attributes)
+        val response = resultService.saveResult(result, googleUser.email)
         return ResponseEntity.ok(response)
     }
 
