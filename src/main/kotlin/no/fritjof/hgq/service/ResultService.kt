@@ -13,7 +13,7 @@ import java.util.Optional
 @Service
 class ResultService(
     private val repository: ResultRepository,
-    private val notificationService: NotificationService
+    private val eventService: EventService
 ) {
 
     fun getAllResults(): List<Result> = repository.findAll().sortedBy { it.date }
@@ -30,7 +30,7 @@ class ResultService(
         }
 
         val savedResult = repository.save(result)
-        notificationService.notify(
+        eventService.publish(
             Event(
                 type = if (existingResult.isPresent) UPDATED else INSERTED,
                 user = email ?: "Unknown user",
