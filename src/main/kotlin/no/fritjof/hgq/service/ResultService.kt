@@ -20,7 +20,7 @@ class ResultService(
 
     fun getResult(localeDate: LocalDate): Optional<Result> = repository.findById(localeDate)
 
-    fun saveResult(result: Result, email: String?): Result {
+    fun saveResult(result: Result, email: String?, sendSlack: Boolean): Result {
         val day = result.date.dayOfWeek
         require(!(day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)) { "Cannot store scores for weekends" }
 
@@ -35,7 +35,8 @@ class ResultService(
                 type = if (existingResult.isPresent) UPDATED else INSERTED,
                 user = email ?: "Unknown user",
                 data = savedResult
-            )
+            ),
+            sendSlack
         )
         return savedResult
     }

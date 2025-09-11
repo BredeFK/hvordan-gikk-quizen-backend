@@ -21,6 +21,11 @@ class SlackService(
 
 
     fun postSlackMessage(event: Event) {
+        if ((System.getenv("SPRING_PROFILES_ACTIVE") ?: "local") == "local") {
+            logger.info("[SLACK_BOT] : Results for [${event.data.date}] -> ${event.data.score}/${event.data.total}")
+            return
+        }
+
         val body = formatMessage(event)
         webclient.post()
             .bodyValue(body)

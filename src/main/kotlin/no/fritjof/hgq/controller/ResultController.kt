@@ -59,12 +59,16 @@ class ResultController(private val resultService: ResultService) {
         description = "Create or update a quiz result",
     )
     @ApiResponse(responseCode = "200", description = "The saved result")
-    fun saveResult(@AuthenticationPrincipal user: OAuth2User?, @RequestBody result: Result): ResponseEntity<Result> {
+    fun saveResult(
+        @AuthenticationPrincipal user: OAuth2User?,
+        @RequestBody result: Result,
+        @RequestParam("sendSlack") sendSlack: Boolean
+    ): ResponseEntity<Result> {
         if (user == null) {
             return ResponseEntity.status(401).build()
         }
         val googleUser = GoogleUserDto.toDto(user.attributes)
-        val response = resultService.saveResult(result, googleUser.email)
+        val response = resultService.saveResult(result, googleUser.email, sendSlack)
         return ResponseEntity.ok(response)
     }
 

@@ -12,11 +12,13 @@ class EventService(
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    fun publish(event: Event) {
+    fun publish(event: Event, sendSlack: Boolean) {
         logger.info("User [${event.user}] [${event.type}] result for [${event.data.date}] to [${event.data.score}/${event.data.total}]")
 
         sseService.broadcast(event)
-        slackService.postSlackMessage(event)
+        if (sendSlack) {
+            slackService.postSlackMessage(event)
+        }
     }
 
 }
