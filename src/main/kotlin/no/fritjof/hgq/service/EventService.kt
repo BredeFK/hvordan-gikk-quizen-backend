@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class EventService(
-    private val sseService: SseService
+    private val sseService: SseService,
+    private val slackService: SlackService,
 ) {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
@@ -15,7 +16,7 @@ class EventService(
         logger.info("User [${event.user}] [${event.type}] result for [${event.data.date}] to [${event.data.score}/${event.data.total}]")
 
         sseService.broadcast(event)
-        // Also: Post to Slack?
+        slackService.postSlackMessage(event)
     }
 
 }

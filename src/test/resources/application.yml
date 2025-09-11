@@ -9,3 +9,7 @@ spring:
 
 cors:
   allowed-origin: http://localhost:3000
+
+services:
+  slack:
+    webhook-url: mock
