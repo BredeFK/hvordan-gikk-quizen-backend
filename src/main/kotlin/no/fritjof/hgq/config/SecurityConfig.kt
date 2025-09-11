@@ -31,7 +31,7 @@ class SecurityConfig(
                     .requestMatchers(
                         HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/health"
                     ).permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/result/**", "/api/ping", "/api/user", "/api/events/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/result/**", "/api/ping", "/api/user").permitAll()
                     .anyRequest().authenticated()
             }
 
