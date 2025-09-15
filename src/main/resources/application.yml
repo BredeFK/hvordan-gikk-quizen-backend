@@ -8,3 +8,6 @@ services:
   slack:
     webhook-url: ${SLACK_WEBHOOK_URL}
 
+quiz:
+  url: ${QUIZ_URL}
+

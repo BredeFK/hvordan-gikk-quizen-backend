@@ -125,6 +125,11 @@
             <artifactId>docker-java</artifactId>
             <version>3.6.0</version>
         </dependency>
+        <dependency>
+            <groupId>it.skrape</groupId>
+            <artifactId>skrapeit</artifactId>
+            <version>1.2.2</version>
+        </dependency>
 
     </dependencies>
 
