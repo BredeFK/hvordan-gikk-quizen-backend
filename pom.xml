@@ -147,6 +147,7 @@
                     <compilerPlugins>
                         <plugin>spring</plugin>
                         <plugin>jpa</plugin>
+                        <plugin>all-open</plugin>
                         <plugin>no-arg</plugin>
                     </compilerPlugins>
                     <!-- Ensure JPA entities are open and have a synthetic no-arg ctor -->
