@@ -1,5 +1,7 @@
 package no.fritjof.hgq.service
 
+import no.fritjof.hgq.dto.ResultDetailDto
+import no.fritjof.hgq.dto.ResultSummaryDto
 import no.fritjof.hgq.model.Event
 import no.fritjof.hgq.model.EventType.INSERTED
 import no.fritjof.hgq.model.EventType.UPDATED
@@ -16,9 +18,29 @@ class ResultService(
     private val eventService: EventService
 ) {
 
-    fun getAllResults(): List<Result> = repository.findAll().sortedBy { it.date }
+    fun getAllResults(): List<ResultSummaryDto> {
+        return repository.findAll().sortedBy { it.date }.map { ResultSummaryDto.toDto(it) }
+    }
 
-    fun getResult(localeDate: LocalDate): Optional<Result> = repository.findById(localeDate)
+    fun getAllDetailedResults(): List<ResultDetailDto> {
+        return repository.findAll().sortedBy { it.date }.map { ResultDetailDto.toDto(it) }
+    }
+
+    fun getResult(localeDate: LocalDate): Optional<ResultSummaryDto> {
+        val result = repository.findById(localeDate)
+        if (!result.isPresent) {
+            return Optional.empty()
+        }
+        return Optional.of(ResultSummaryDto.toDto(result.get()))
+    }
+
+    fun getDetailedResult(localDate: LocalDate): Optional<ResultDetailDto> {
+        val result = repository.findById(localDate)
+        if (!result.isPresent) {
+            return Optional.empty()
+        }
+        return Optional.of(ResultDetailDto.toDto(result.get()))
+    }
 
     fun saveResult(result: Result, email: String?, sendSlack: Boolean): Result {
         val day = result.date.dayOfWeek
