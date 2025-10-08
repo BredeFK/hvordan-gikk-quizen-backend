@@ -14,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
-import java.util.Optional
 
 @Tag(name = "Result Controller")
 @RestController
@@ -26,39 +25,25 @@ class ResultController(private val resultService: ResultService) {
     @GetMapping("/all", produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(
         summary = "Get all results",
-        description = "Return all documented results. " +
-                "If the user is logged in, detailed results are returned as well, with the participant names",
+        description = "Return all results documented",
     )
     @ApiResponse(responseCode = "200", description = "List of results")
-    fun getAllResults(@AuthenticationPrincipal user: OAuth2User?): ResponseEntity<List<Any>> {
-        val results: List<Any> = if (user == null) {
-            resultService.getAllResults()
-        } else {
-            resultService.getAllDetailedResults()
-        }
-        return ResponseEntity.ok(results)
+    fun getAllResults(): ResponseEntity<List<Result>> {
+        return ResponseEntity.ok(resultService.getAllResults())
     }
 
     @GetMapping("/{date}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(
         summary = "Get result by id/date",
-        description = "Return result if it exist and the date is valid. " +
-                "If the user is logged in, detailed result is returned as well, with the participant names",
+        description = "Return result if it exist and the date is valid",
     )
     @ApiResponse(responseCode = "200", description = "Result")
     @ApiResponse(responseCode = "404", description = "Not found")
     @ApiResponse(responseCode = "400", description = "Date is not valid")
-    fun getResultById(
-        @PathVariable date: String,
-        @AuthenticationPrincipal user: OAuth2User?,
-    ): ResponseEntity<Any> {
+    fun getResultById(@PathVariable date: String): ResponseEntity<Result> {
         try {
             val parsedDate = LocalDate.parse(date)
-            val result: Optional<out Any> = if (user == null) {
-                resultService.getResult(parsedDate)
-            } else {
-                resultService.getDetailedResult(parsedDate)
-            }
+            val result = resultService.getResult(parsedDate)
             if (result.isPresent) {
                 return ResponseEntity.ok(result.get())
             }
