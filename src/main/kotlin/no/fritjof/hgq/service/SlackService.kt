@@ -22,7 +22,7 @@ class SlackService(
 
     fun postSlackMessage(event: Event) {
         if ((System.getenv("SPRING_PROFILES_ACTIVE") ?: "local") == "local") {
-            logger.info("[SLACK_BOT] : Results for [${event.data.date}] -> ${event.data.score}/${event.data.total}")
+            logger.info("[SLACK_BOT] : Results for [${event.data.date}] -> ${event.data.score}/${event.data.total} & source [${event.data.quizSource}]")
             return
         }
 
@@ -43,37 +43,11 @@ class SlackService(
         return "$weekday $dateString"
     }
 
-    private fun getColour(score: Int) = when (score) {
-        0 -> "#4d0000"
-        1 -> "#660000"
-        2 -> "#800000"
-        3 -> "#a50026"
-        4 -> "#d73027"
-        5 -> "#f46d43"
-        6 -> "#fdae61"
-        7 -> "#fee08b"
-        8 -> "#a6d96a"
-        9 -> "#1a9850"
-        10 -> "#006837"
-        else -> "#4bb543"
-    }
-
-    private fun emoji(score: Int): String {
-        return when (score) {
-            10 -> ":penguin_dance:"
-            9 -> ":flushed:"
-            5 -> ":confuseddog:"
-            1 -> ":face_with_cowboy_hat:"
-            0 -> ":skull:"
-            else -> ""
-        }
-    }
-
     private fun formatMessage(event: Event) = """
         {
             "attachments": [
                 {
-                    "color": "${getColour(event.data.score)}",
+                    "color": "#52A185",
                     "blocks": [
                         {
                             "type": "header",
@@ -86,7 +60,7 @@ class SlackService(
                             "type": "header",
                             "text": {
                                 "type": "plain_text",
-                                "text": "${event.data.score}/${event.data.total}${emoji(event.data.score)}"
+                                "text": "${event.data.score}/${event.data.total} [${event.data.quizSource}]"
                             }
                         },
                         {
