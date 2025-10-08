@@ -10,6 +10,7 @@ data class Result(
     @Id
     val date: LocalDate = LocalDate.now(),
     var score: Int = 0,
-    var total: Int = 10
+    var total: Int = 10,
+    var quizSource: String = ""
 
 )

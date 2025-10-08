@@ -6,21 +6,23 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import no.fritjof.hgq.dto.GoogleUserDto
 import no.fritjof.hgq.model.Result
 import no.fritjof.hgq.service.ResultService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
 
 @Tag(name = "Result Controller")
 @RestController
 @RequestMapping("/api/result")
 class ResultController(private val resultService: ResultService) {
-
-    private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @GetMapping("/all", produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(
@@ -51,6 +53,16 @@ class ResultController(private val resultService: ResultService) {
         } catch (_: Exception) {
             return ResponseEntity.badRequest().build()
         }
+    }
+
+    @GetMapping("/quiz-sources/all", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Operation(
+        summary = "Get all distinct quiz sources",
+        description = "Return all documented quiz sources",
+    )
+    @ApiResponse(responseCode = "200", description = "List of quiz sources")
+    fun getAllDistinctQuizSources(): ResponseEntity<List<String>> {
+        return ResponseEntity.ok(resultService.getAllDistinctQuizSources())
     }
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])

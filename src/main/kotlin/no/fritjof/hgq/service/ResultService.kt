@@ -40,4 +40,8 @@ class ResultService(
         )
         return savedResult
     }
+
+    fun getAllDistinctQuizSources(): List<String> {
+        return repository.findDistinctQuizSources()
+    }
 }
