@@ -22,7 +22,7 @@ class SlackService(
 
     fun postSlackMessage(event: Event) {
         if ((System.getenv("SPRING_PROFILES_ACTIVE") ?: "local") == "local") {
-            logger.info("[SLACK_BOT] : Results for [${event.data.date}] -> ${event.data.score}/${event.data.total} & source [${event.data.quizSource}]")
+            logger.info("[SLACK_BOT] : Results for [${event.data.date}] -> ${event.data.score}/${event.data.total}")
             return
         }
 
@@ -60,7 +60,7 @@ class SlackService(
                             "type": "header",
                             "text": {
                                 "type": "plain_text",
-                                "text": "${event.data.score}/${event.data.total} [${event.data.quizSource}]"
+                                "text": "${event.data.score}/${event.data.total}"
                             }
                         },
                         {

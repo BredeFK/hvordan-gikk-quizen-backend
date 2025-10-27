@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.fritjof.hgq.dto.GoogleUserDto
+import no.fritjof.hgq.dto.ResultDto
 import no.fritjof.hgq.model.Result
 import no.fritjof.hgq.service.ResultService
 import org.springframework.http.MediaType
@@ -27,11 +28,11 @@ class ResultController(private val resultService: ResultService) {
     @GetMapping("/all", produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(
         summary = "Get all results",
-        description = "Return all results documented",
+        description = "Return all results documented with percentage calculations",
     )
     @ApiResponse(responseCode = "200", description = "List of results")
-    fun getAllResults(): ResponseEntity<List<Result>> {
-        return ResponseEntity.ok(resultService.getAllResults())
+    fun getAllResults(): ResponseEntity<List<ResultDto>> {
+        return ResponseEntity.ok(resultService.getAllResults().map { ResultDto.fromResult(it) })
     }
 
     @GetMapping("/{date}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -42,27 +43,17 @@ class ResultController(private val resultService: ResultService) {
     @ApiResponse(responseCode = "200", description = "Result")
     @ApiResponse(responseCode = "404", description = "Not found")
     @ApiResponse(responseCode = "400", description = "Date is not valid")
-    fun getResultById(@PathVariable date: String): ResponseEntity<Result> {
+    fun getResultById(@PathVariable date: String): ResponseEntity<ResultDto> {
         try {
             val parsedDate = LocalDate.parse(date)
             val result = resultService.getResult(parsedDate)
             if (result.isPresent) {
-                return ResponseEntity.ok(result.get())
+                return ResponseEntity.ok(ResultDto.fromResult(result.get()))
             }
             return ResponseEntity.notFound().build()
         } catch (_: Exception) {
             return ResponseEntity.badRequest().build()
         }
-    }
-
-    @GetMapping("/quiz-sources/all", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @Operation(
-        summary = "Get all distinct quiz sources",
-        description = "Return all documented quiz sources",
-    )
-    @ApiResponse(responseCode = "200", description = "List of quiz sources")
-    fun getAllDistinctQuizSources(): ResponseEntity<List<String>> {
-        return ResponseEntity.ok(resultService.getAllDistinctQuizSources())
     }
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
