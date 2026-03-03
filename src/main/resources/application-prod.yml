@@ -6,7 +6,7 @@ spring:
       client:
         registration:
           google:
-            redirect-uri: "https://api.hvordangikkquizen.no/login/oauth2/code/google"
+            redirect-uri: "https://hvordan-gikk-quizen-backend.fly.dev/login/oauth2/code/google"
 
 server:
   address: 127.0.0.1
