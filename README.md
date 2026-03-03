@@ -21,9 +21,10 @@ There are two .env files, one for local development and one for production:
 
 They both look like this:
 ```dotenv
+GOOGLE_CLIENT_ID=<id>
+GOOGLE_CLIENT_SECRET=<secret>
 DATABASE_URL=<url>
 DATABASE_USERNAME=<username>
 DATABASE_PASSWORD=<password>
-GOOGLE_CLIENT_ID=<id>
-GOOGLE_CLIENT_SECRET=<secret>
+SLACK_WEBHOOK_URL=<url>
 ```
