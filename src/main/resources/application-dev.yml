@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:file:environments/.env.local[.properties]
+    import: optional:file:environments/.env.dev[.properties]
   security:
     oauth2:
       client:

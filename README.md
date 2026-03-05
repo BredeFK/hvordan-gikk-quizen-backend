@@ -17,14 +17,23 @@ with Google OAuth2 plus Slack webhooks for notifications.
 
 ## Environments
 
-### .env
+### ./environments/.env.*
 
-There are two .env files, one for local development and one for production:
+#### .env.local
 
-* `.env.local`
-* `.env.prod`
+Uses the localhost Google Oauth2, a local DB and mocks the Slack messages
 
-They both look like this:
+#### .env.dev
+
+Uses the localhost Google Oauth2, the production DB and posts real Slack messages
+
+#### .env.prod
+
+Uses the production Google Oauth2, the production DB and posts real Slack messages
+
+### Syntax
+
+They all look like this:
 
 ```dotenv
 GOOGLE_CLIENT_ID=<id>
