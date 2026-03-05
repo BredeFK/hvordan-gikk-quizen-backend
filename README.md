@@ -43,3 +43,5 @@ DATABASE_USERNAME=<username>
 DATABASE_PASSWORD=<password>
 SLACK_WEBHOOK_URL=<url>
 ```
+
+:warning: Remember to add `SPRING_PROFILES_ACTIVE=prod` as an environment variable if you deploy it somewhere.
